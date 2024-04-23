@@ -67,11 +67,11 @@ def send_email(email, code):
 
 
 def send_phone(phone, code):
-    account_sid = 'AC043f6aadea3f2bccee5378954a96dcd2'
-    auth_token = '4a92d0d6de916635168559ce2a80b118'
+    account_sid = config('account_sid')
+    auth_token = config('auth_token')
     client = Client(account_sid, auth_token)
     client.messages.create(
         body=f"Salom foydalanuvchi! Sizning instagramdagi tasdiqlash kodingiz: {code}\n",
-        from_='+14248887173',
+        from_=config('phone'),
         to=f"{phone}"
     )
