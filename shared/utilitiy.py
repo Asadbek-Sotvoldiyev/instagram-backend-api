@@ -9,6 +9,7 @@ from rest_framework.exceptions import ValidationError
 
 email_regex = re.compile(r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b")
 phone_regex = re.compile(r"^\+998([- ])?(90|91|93|94|95|98|99|33|97|71)([- ])?(\d{3})([- ])?(\d{2})([- ])?(\d{2})$")
+username = re.compile(r"^[a-zA-Z0-9._-]+$")
 
 
 def check_email_or_phone(email_or_phone):
@@ -26,6 +27,22 @@ def check_email_or_phone(email_or_phone):
         raise ValidationError(data)
 
     return email_or_phone
+
+def check_user_type(user_input):
+    if re.fullmatch(email_regex, user_input):
+        user_input = 'email'
+    elif re.fullmatch(phone_regex, user_input):
+        user_input = 'phone'
+    elif re.fullmatch(username, user_input):
+        user_input = 'username'
+    else:
+        data = {
+            "success": False,
+            "message": "Email, Username yoki telefon raqam xato"
+        }
+        raise ValidationError(data)
+    return user_input
+
 
 # Emailga asinxron jo'natish
 class EmailThreading(threading.Thread):
